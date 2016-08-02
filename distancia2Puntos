@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApplication1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            double lat1 = Double.Parse(txtLatA.Text);
+            double lat2 = Double.Parse(txtLatB.Text);
+            double lon1 = Double.Parse(txtLongA.Text);
+            double lon2 = Double.Parse(txtLongB.Text);
+            txtResultado.Text = Distance(lat1, lon1, lat2, lon2, 'K').ToString() + " Km\n";
+            txtResultado.Text += Distance(lat1, lon1, lat2, lon2, 'M').ToString() + " Millas\n";
+            txtResultado.Text += Distance(lat1, lon1, lat2, lon2, 'N').ToString() + " Millas naúticas\n";
+        }
+
+        static double Distance(double lat1, double lon1, double lat2, double lon2, char unit)
+        {
+            double deg2radMultiplier = Math.PI / 180;
+            lat1 = lat1 * deg2radMultiplier;
+            lon1 = lon1 * deg2radMultiplier;
+            lat2 = lat2 * deg2radMultiplier;
+            lon2 = lon2 * deg2radMultiplier;
+
+            double radius = 6378.137; // radio medio de la tierra definido por WGS84
+            double dlon = lon2 - lon1;
+            double distance = Math.Acos(Math.Sin(lat1) * Math.Sin(lat2) + Math.Cos(lat1) * Math.Cos(lat2) * Math.Cos(dlon)) * radius;
+
+            if (unit == 'K')
+            {
+                return (distance);
+            }
+            else if (unit == 'M')
+            {
+                return (distance * 0.621371192);
+            }
+            else if (unit == 'N')
+            {
+                return (distance * 0.539956803);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+}
